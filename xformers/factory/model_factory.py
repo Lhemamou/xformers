@@ -265,6 +265,7 @@ class xFormer(torch.nn.Module):
         tgt: Optional[torch.Tensor] = None,
         encoder_input_mask: Optional[torch.Tensor] = None,
         decoder_input_mask: Optional[torch.Tensor] = None,
+        encoder_att_mask : Optional[torch.Tensor] = None,
     ) -> Optional[torch.Tensor]:
 
         # Encode to latent space if encoder is present
@@ -273,7 +274,7 @@ class xFormer(torch.nn.Module):
             memory = src.clone()
             if isinstance(encoders, torch.nn.ModuleList):
                 for encoder in encoders:
-                    memory = encoder(memory, input_mask=encoder_input_mask)
+                    memory = encoder(memory, input_mask=encoder_input_mask,att_mask=encoder_att_mask)
             else:
                 if self.rev_enc_pose_encoding:
                     memory = self.rev_enc_pose_encoding(src)
